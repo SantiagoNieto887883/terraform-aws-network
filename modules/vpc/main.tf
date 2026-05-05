@@ -1,9 +1,13 @@
 resource "aws_vpc" "principal_vpc" {
   cidr_block = var.vpc_cidr
 
-  tags = {
-    Name = "dev-vpc"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name = var.vpc_name
+    }
+    
+  )
 }
 
 # PUBLIC SUBNET
@@ -12,9 +16,12 @@ resource "aws_subnet" "public" {
   cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = true
 
-  tags = {
-    Name = "public-subnet"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name = var.public_subnet_name
+    }
+  )
 }
 
 # PRIVATE SUBNET
@@ -22,18 +29,24 @@ resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.principal_vpc.id
   cidr_block = var.private_subnet_cidr
 
-  tags = {
-    Name = "private-subnet"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name = var.private_subnet_name
+    }
+  )
 }
 
 # INTERNET GATEWAY
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.principal_vpc.id
 
-  tags = {
-    Name = "dev-igw"
-  }
+  tags = merge(
+    var.tags,
+    {
+      
+    }
+  )
 }
 
 # ELASTIC IP (para NAT)

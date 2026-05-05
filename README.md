@@ -11,6 +11,10 @@ aws configure o aws login
 
 terraform init
 
-terraform plan -var-file=env/dev/terraform.tfvars
+terraform plan -var-file=env/dev.tfvars -out tfplan
 
+## ver plan
+terraform show -no-color tfplan > plan.txt
+
+## aplicar plan
 terraform apply -var-file=env/dev/terraform.tfvars
