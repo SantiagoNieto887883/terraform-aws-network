@@ -12,4 +12,3 @@ variable "environment" {}
 variable "tags" {
   type = map(string)
 }
-
