@@ -18,3 +18,7 @@ terraform show -no-color tfplan > plan.txt
 
 ## aplicar plan
 terraform apply -var-file=env/dev/terraform.tfvars
+
+## destruye
+terraform destroy -var-file=env/dev.tfvars
+
