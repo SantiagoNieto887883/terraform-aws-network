@@ -23,4 +23,5 @@ resource "aws_iam_role_policy_attachment" "ssm_attach" {
 resource "aws_iam_instance_profile" "ssm_profile" {
   name = "${local.name_prefix}-ssm-profile"
   role = aws_iam_role.ssm_role.name
+  depends_on = [ aws_iam_role.ssm_role ]
 }

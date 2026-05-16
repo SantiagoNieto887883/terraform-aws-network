@@ -7,6 +7,10 @@ autenticate en AWS con
 
 aws configure o aws login
 
+## generar llave
+
+ssh-keygen -t rsa -b 2048 -f mykey
+
 ## ejecutar
 
 terraform init

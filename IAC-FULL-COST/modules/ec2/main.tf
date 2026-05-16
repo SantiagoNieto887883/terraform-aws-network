@@ -5,7 +5,7 @@ resource "aws_instance" "this" {
   vpc_security_group_ids      = var.security_group_ids
   associate_public_ip_address = var.associate_public_ip
   
-  iam_instance_profile = var.iam_instance_profile
+  key_name = var.key_name
 
   tags = {
     Name = var.name

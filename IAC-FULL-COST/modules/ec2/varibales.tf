@@ -7,4 +7,4 @@ variable "security_group_ids" {
 variable "name" {}
 variable "associate_public_ip" {}
 
-variable "iam_instance_profile" {}
+variable "key_name" {}

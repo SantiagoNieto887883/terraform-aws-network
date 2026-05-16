@@ -43,6 +43,35 @@ module "private_ec2" {
   name                   = "${local.name_prefix}-private"
   associate_public_ip    = false
 
-  iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+  key_name = aws_key_pair.this.key_name
 
+}
+
+module "bastion" {
+  source = "./modules/ec2"
+
+  ami                 = data.aws_ami.amazon_linux.id
+  instance_type       = "t3.micro"
+  subnet_id           = module.vpc.public_subnet_id
+  security_group_ids  = [module.sg_bastion.sg_id]
+  name                = "${local.name_prefix}-bastion"
+  associate_public_ip = true
+
+  key_name = aws_key_pair.this.key_name
+}
+
+module "sg_bastion" {
+  source = "./modules/security-group"
+
+  vpc_id = module.vpc.vpc_id
+  name   = "${local.name_prefix}-bastion-sg"
+
+  ingress_rules = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["190.145.240.172/32"]
+    }
+  ]
 }

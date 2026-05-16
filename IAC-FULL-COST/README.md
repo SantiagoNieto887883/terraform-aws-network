@@ -7,6 +7,10 @@ autenticate en AWS con
 
 aws configure o aws login
 
+## generar llave
+
+ssh-keygen -t rsa -b 2048 -f mykey
+
 ## ejecutar
 
 terraform init
@@ -17,7 +21,7 @@ terraform plan -var-file=env/dev.tfvars -out tfplan
 terraform show -no-color tfplan > plan.txt
 
 ## aplicar plan
-terraform apply -var-file=env/dev/terraform.tfvars
+terraform apply -var-file=env/dev.tfvars
 
 ## destruye
 terraform destroy -var-file=env/dev.tfvars
