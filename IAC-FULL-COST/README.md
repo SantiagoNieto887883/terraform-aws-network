@@ -11,6 +11,8 @@ aws configure o aws login
 
 ssh-keygen -t rsa -b 2048 -f mykey
 
+chmod 400 mykey
+
 ## ejecutar
 
 terraform init
@@ -26,3 +28,10 @@ terraform apply -var-file=env/dev.tfvars
 ## destruye
 terraform destroy -var-file=env/dev.tfvars
 
+## adicionales
+
+## ver ip de las instancias
+
+Entra a las instancias
+
+ssh -i mykey ec2-user@IP_BASTION
