@@ -29,6 +29,12 @@ module "sg_private" {
       to_port     = 22
       protocol    = "tcp"
       cidr_blocks = ["10.0.1.0/24"]
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
     }
   ]
 }
@@ -44,6 +50,8 @@ module "private_ec2" {
   associate_public_ip    = false
 
   key_name = aws_key_pair.this.key_name
+
+  user_data = file("${path.module}./userdata/install_docker.sh")
 
 }
 

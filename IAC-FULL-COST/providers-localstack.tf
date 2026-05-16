@@ -16,6 +16,7 @@ provider "aws" {
     sts = "http://localhost:4566"
     iam = "http://localhost:4566"
     ssm = "http://localhost:4566"
+    dynamodb = "http://localhost:4566"
   }
   
   default_tags {

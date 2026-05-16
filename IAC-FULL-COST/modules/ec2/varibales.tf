@@ -8,3 +8,8 @@ variable "name" {}
 variable "associate_public_ip" {}
 
 variable "key_name" {}
+
+variable "user_data" {
+  type    = string
+  default = null
+}
