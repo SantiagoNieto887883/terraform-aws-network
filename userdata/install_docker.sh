@@ -1,10 +1,9 @@
 #!/bin/bash
 
 yum update -y
+yum install docker -y
 
-amazon-linux-extras install docker -y
-
-systemctl start docker
 systemctl enable docker
+systemctl start docker
 
-docker run -d -p 80:5000 dockersant887883/flask-devops-app:v1
+usermod -aG docker ec2-user
