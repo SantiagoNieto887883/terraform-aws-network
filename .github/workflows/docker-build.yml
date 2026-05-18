@@ -39,3 +39,15 @@ jobs:
       - name: Push SHA Tag
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${IMAGE_TAG}
+      
+      - name: Deploy
+        run: |
+          aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --targets "Key=tag:Name,Values=dev-private" \
+          --parameters 'commands=[
+            "docker pull '${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}'",
+            "docker stop app || true",
+            "docker rm app || true",
+            "docker run -d --name app -p 80:5000 '${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}'"
+          ]'
