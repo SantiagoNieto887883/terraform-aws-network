@@ -18,7 +18,7 @@ jobs:
       IMAGE_NAME: flask-devops-app
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      GITHUB_ACTIONS_ROLE: ${{ secrets.GITHUB_ACTIONS_ROLE }}
+      ACTIONS_ROLE_GITHUB: ${{ secrets.ACTIONS_ROLE_GITHUB }}
 
     steps:
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.GITHUB_ACTIONS_ROLE }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ACTIONS_ROLE_GITHUB }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Set Variables
