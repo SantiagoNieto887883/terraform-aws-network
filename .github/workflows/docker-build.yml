@@ -30,6 +30,49 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ACTIONS_ROLE_GITHUB }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Validate SSM target
+        run: |
+          echo "Validating EC2 target..."
+
+          INSTANCE_IDS=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=dev-localstack-infra-private" \
+                      "Name=instance-state-name,Values=running" \
+            --query "Reservations[*].Instances[*].InstanceId" \
+            --output text)
+
+          if [ -z "$INSTANCE_IDS" ]; then
+            echo "ERROR: No running EC2 instances found with tag Name=dev-localstack-infra-private"
+            exit 1
+          fi
+
+          echo "Found EC2 instances:"
+          echo "$INSTANCE_IDS"
+
+          SSM_INSTANCES=$(aws ssm describe-instance-information \
+            --query "InstanceInformationList[*].InstanceId" \
+            --output text)
+
+          MATCH_FOUND=false
+
+          for INSTANCE_ID in $INSTANCE_IDS; do
+            if echo "$SSM_INSTANCES" | grep -q "$INSTANCE_ID"; then
+              echo "SSM managed instance found: $INSTANCE_ID"
+              MATCH_FOUND=true
+            fi
+          done
+
+          if [ "$MATCH_FOUND" = false ]; then
+            echo "ERROR: EC2 instance exists but is NOT registered in AWS SSM"
+            echo "Check:"
+            echo "- IAM Role attached"
+            echo "- AmazonSSMManagedInstanceCore policy"
+            echo "- amazon-ssm-agent status"
+            echo "- NAT Gateway / VPC endpoints"
+            exit 1
+          fi
+
+          echo "SSM validation successful."      
+
       - name: Set Variables
         run: |
           echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
@@ -67,3 +110,4 @@ jobs:
               ]
             }' \
             --region $AWS_REGION
+
