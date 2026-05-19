@@ -53,14 +53,17 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${IMAGE_TAG}
       
-      - name: Deploy
+      - name: Deploy to EC2
         run: |
           aws ssm send-command \
-          --document-name "AWS-RunShellScript" \
-          --targets "Key=tag:Name,Values=dev-localstack-infra-private" \
-          --parameters commands="[ 'docker pull ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}',
-           'docker stop app || true', 
-           'docker rm app || true', 
-           'docker run -d --name app -p 80:5000 ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}' 
-           ]" \
-           --region $AWS_REGION
+            --document-name "AWS-RunShellScript" \
+            --targets "Key=tag:Name,Values=dev-localstack-infra-private" \
+            --parameters '{
+              "commands": [
+                "docker pull ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}",
+                "docker stop app || true",
+                "docker rm app || true",
+                "docker run -d --name app -p 80:5000 ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}"
+              ]
+            }' \
+            --region $AWS_REGION
