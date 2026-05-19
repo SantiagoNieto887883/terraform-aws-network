@@ -16,14 +16,13 @@ chmod 400 mykey
 ## Crea un bucket s3 para declarar en el backend de terraform (aplica si usas localstack)
 
 ```bash
-docker exec terraform-localstack-aws-s3-localstack-1 bash -lc "\
-awslocal s3 mb s3://tfstate-bucket && \
-awslocal s3api put-bucket-versioning \
+aws s3 mb s3://tfstate-bucket --endpoint-url $AWS_ENDPOINT_URL && \
+aws s3api --endpoint-url $AWS_ENDPOINT_URL put-bucket-versioning \
   --bucket tfstate-bucket \
-  --versioning-configuration Status=Enabled"
+  --versioning-configuration Status=Enabled
 ```
 
-## ejecutar
+## Desplegar infraestrucura
 
 terraform init
 
