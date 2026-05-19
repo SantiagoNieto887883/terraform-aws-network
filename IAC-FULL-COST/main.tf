@@ -94,7 +94,8 @@ module "github_oidc" {
   allowed_actions = [
     "ssm:SendCommand",
     "ssm:ListCommandInvocations",
-    "ec2:DescribeInstances"
+    "ec2:DescribeInstances",
+    "ssm:DescribeInstanceInformation"
   ]
 
   tags = local.common_tags
