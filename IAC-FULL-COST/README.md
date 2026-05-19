@@ -41,6 +41,27 @@ terraform destroy -var-file=env/dev.tfvars
 
 ## ver ip de las instancias
 
-Entra a las instancias
+# configura la key
 
-ssh -i mykey ec2-user@IP_BASTION
+eval $(ssh-agent -s)
+
+ssh-add mykey
+
+# Verificar que realmente quedó cargada
+
+ssh-add -L
+
+
+# Entra a las instancias
+
+Bastion
+
+ssh -A -i mykey ec2-user@BASTION_PUBLIC_IP
+
+# verifica que la llave quedo en el bastion
+
+ssh-add -L
+
+ingresa a private
+
+ssh ec2-user@ip_private
