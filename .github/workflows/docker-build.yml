@@ -57,7 +57,7 @@ jobs:
         run: |
           aws ssm send-command \
           --document-name "AWS-RunShellScript" \
-          --targets "Key=tag:Name,Values=dev-private" \
+          --targets "Key=tag:Name,Values=dev-localstack-infra-private" \
           --parameters commands="[ 'docker pull ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${VERSION}',
            'docker stop app || true', 
            'docker rm app || true', 
