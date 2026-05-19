@@ -83,3 +83,19 @@ module "sg_bastion" {
     }
   ]
 }
+
+module "github_oidc" {
+  source = "./modules/github_oidc"
+
+  role_name   = "github-actions-role"
+  github_org  = "SantiagoNieto887883"
+  github_repo = "terraform-aws-network"
+
+  allowed_actions = [
+    "ssm:SendCommand",
+    "ssm:ListCommandInvocations",
+    "ec2:DescribeInstances"
+  ]
+
+  tags = local.common_tags
+}
