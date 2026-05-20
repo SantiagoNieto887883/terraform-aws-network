@@ -49,6 +49,8 @@ module "private_ec2" {
   name                   = "${local.name_prefix}-private"
   associate_public_ip    = false
 
+  iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
+
   key_name = aws_key_pair.this.key_name
 
   user_data = file("${path.module}./userdata/install_docker.sh")
